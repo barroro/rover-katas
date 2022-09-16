@@ -12,20 +12,57 @@ export interface Position {
   direction: Direction;
 }
 
-export type Command = string;
+export type Command = "forward" | "backward";
+
+export type CommandDictionary = {
+  [command in Command]: Function;
+};
 
 export class Rover {
-  constructor(private _position: Position) {}
+  private _logs: string[];
+  constructor(private _position: Position) {
+    this._logs = [];
+  }
 
   get position() {
     return this._position;
   }
 
-  logs(logs: any) {
-    throw new Error("Method not implemented.");
+  get logs() {
+    return this._logs;
+  }
+
+  private commandDictionary: CommandDictionary = {
+    backward: () => this.backward(),
+    forward: () => this.forward(),
+  };
+
+  generateLogs(commands: Command[]) {
+    const commandLogs: string[] = commands.map(
+      (command: string) => `${command} executed`
+    );
+
+    this._logs = commandLogs;
   }
   // TODO: create Command interface and complete the function & test
   execute(commands: Command[]) {
-    throw new Error("Method not implemented.");
+    this.generateLogs(commands);
+    commands.forEach((command) => this.commandDictionary[command]());
+  }
+
+  forward() {
+    const currentY = this.position.coordinates.y;
+    this._position = {
+      ...this._position,
+      coordinates: { x: 0, y: currentY + 1 },
+    };
+  }
+
+  backward() {
+    const currentY = this.position.coordinates.y;
+    this._position = {
+      ...this._position,
+      coordinates: { x: 0, y: currentY - 1 },
+    };
   }
 }

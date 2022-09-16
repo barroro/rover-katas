@@ -18,16 +18,54 @@ describe("Rover", () => {
     expect(rover.position).toEqual(expectedValue);
   });
 
-  it("should receive commands", () => {
+  it("should receive commands and generate logs", () => {
     const rover = new Rover(initialPosition);
-    const commands: Array<Command> = ["left", "right", "up"];
+    const commands: Array<Command> = ["forward", "backward", "forward"];
     rover.execute(commands);
 
     expect(rover.logs).toHaveLength(3);
 
-    const expectedLogs = ["Left executed", "Right executed", "Up executed"];
+    const expectedLogs: string[] = [
+      "forward executed",
+      "backward executed",
+      "forward executed",
+    ];
     expect(rover.logs).toEqual(expectedLogs);
   });
 
-  // it("should");
+  it("should move rover fordward one position", () => {
+    const rover = new Rover(initialPosition);
+    const commands: Array<Command> = ["forward"];
+    rover.execute(commands);
+
+    const expectedPosition: Position = {
+      coordinates: { x: 0, y: 1 },
+      direction: Direction.Nord,
+    };
+    expect(rover.position).toEqual(expectedPosition);
+  });
+
+  it("should move rover backward one position", () => {
+    const rover = new Rover(initialPosition);
+    const commands: Array<Command> = ["backward"];
+    rover.execute(commands);
+
+    const expectedPosition: Position = {
+      coordinates: { x: 0, y: -1 },
+      direction: Direction.Nord,
+    };
+    expect(rover.position).toEqual(expectedPosition);
+  });
+
+  it("should move rover by commands", () => {
+    const rover = new Rover(initialPosition);
+    const commands: Array<Command> = ["backward", "forward", "forward"];
+    rover.execute(commands);
+
+    const expectedPosition: Position = {
+      coordinates: { x: 0, y: 1 },
+      direction: Direction.Nord,
+    };
+    expect(rover.position).toEqual(expectedPosition);
+  });
 });
