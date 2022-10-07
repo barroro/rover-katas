@@ -5,6 +5,7 @@ export interface Coordinates {
 
 export enum Direction {
   Nord,
+  East,
 }
 
 export interface Position {
@@ -12,7 +13,7 @@ export interface Position {
   direction: Direction;
 }
 
-export type Command = "forward" | "backward";
+export type Command = "forward" | "backward" | "rotateRight";
 
 export type CommandDictionary = {
   [command in Command]: Function;
@@ -35,6 +36,7 @@ export class Rover {
   private commandDictionary: CommandDictionary = {
     backward: () => this.backward(),
     forward: () => this.forward(),
+    rotateRight: () => this.rotate(),
   };
 
   generateLogs(commands: Command[]) {
@@ -63,6 +65,13 @@ export class Rover {
     this._position = {
       ...this._position,
       coordinates: { x: 0, y: currentY - 1 },
+    };
+  }
+
+  rotate() {
+    this._position = {
+      ...this._position,
+      direction: Direction.East
     };
   }
 }
